@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DigiGrow - Zgjidhje Dixhitale</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --teal: #0d9488;
+    --teal-light: #14b8a6;
+    --teal-dark: #0f766e;
+    --blue: #1e3a5f;
+    --blue-mid: #1e40af;
+    --blue-dark: #0f172a;
+    --blue-navy: #0d1f3c;
+    --accent: #5eead4;
+    --accent2: #38bdf8;
+    --white: #f0fdf4;
+    --gray: #94a3b8;
+    --card-bg: rgba(14, 116, 144, 0.08);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--blue-dark);
+    color: var(--white);
+    overflow-x: hidden;
+  }
+
+  /* MESH BACKGROUND */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 10%, rgba(13,148,136,0.25) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 80% at 80% 80%, rgba(30,58,95,0.5) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 50% at 50% 50%, rgba(14,116,144,0.1) 0%, transparent 70%);
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.2rem 2rem;
+    background: rgba(13, 31, 60, 0.85);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(94, 234, 212, 0.15);
+  }
+
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.5rem;
+    letter-spacing: -0.03em;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .logo-icon {
+    width: 32px; height: 32px;
+    background: linear-gradient(135deg, var(--teal), var(--blue-mid));
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  nav ul {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  nav ul a {
+    color: rgba(240,253,244,0.7);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+
+  nav ul a:hover { color: var(--accent); }
+
+  .nav-cta {
+    background: linear-gradient(135deg, var(--teal), var(--teal-dark));
+    color: white !important;
+    padding: 0.55rem 1.2rem;
+    border-radius: 8px;
+    font-weight: 600 !important;
+    transition: opacity 0.2s !important;
+  }
+
+  .nav-cta:hover { opacity: 0.85 !important; color: white !important; }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 7rem 2rem 4rem;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(13,148,136,0.15);
+    border: 1px solid rgba(94,234,212,0.3);
+    color: var(--accent);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.4rem 1rem;
+    border-radius: 100px;
+    margin-bottom: 2rem;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(2.4rem, 7vw, 5rem);
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    margin-bottom: 1.5rem;
+    animation: fadeUp 0.7s 0.1s ease both;
+  }
+
+  .hero h1 span {
+    background: linear-gradient(135deg, var(--accent), var(--accent2), var(--teal-light));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero p {
+    font-size: 1.1rem;
+    color: rgba(240,253,244,0.65);
+    max-width: 520px;
+    line-height: 1.7;
+    margin-bottom: 2.5rem;
+    animation: fadeUp 0.7s 0.2s ease both;
+  }
+
+  .hero-btns {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    animation: fadeUp 0.7s 0.3s ease both;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--teal), var(--teal-dark));
+    color: white;
+    padding: 0.9rem 2rem;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 24px rgba(13,148,136,0.35);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(13,148,136,0.5);
+  }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--accent);
+    padding: 0.9rem 2rem;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    border: 1px solid rgba(94,234,212,0.35);
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+  }
+
+  .btn-secondary:hover {
+    background: rgba(94,234,212,0.08);
+    transform: translateY(-2px);
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 3rem;
+    margin-top: 4rem;
+    animation: fadeUp 0.7s 0.4s ease both;
+  }
+
+  .stat { text-align: center; }
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .stat-label { font-size: 0.8rem; color: var(--gray); margin-top: 0.2rem; }
+
+  /* DIVIDER LINE */
+  .section-divider {
+    position: relative; z-index: 1;
+    display: flex; align-items: center; gap: 1rem;
+    padding: 0 2rem; max-width: 900px; margin: 0 auto 1rem;
+  }
+  .section-divider::before, .section-divider::after {
+    content: ''; flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(94,234,212,0.2), transparent);
+  }
+  .section-label {
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  /* SECTIONS */
+  section {
+    position: relative; z-index: 1;
+    padding: 5rem 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    letter-spacing: -0.02em;
+    margin-bottom: 0.8rem;
+  }
+
+  .section-sub {
+    color: rgba(240,253,244,0.55);
+    font-size: 1rem;
+    max-width: 480px;
+    line-height: 1.6;
+    margin-bottom: 3rem;
+  }
+
+  /* PROJECTS */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .project-card {
+    background: rgba(13,148,136,0.07);
+    border: 1px solid rgba(94,234,212,0.12);
+    border-radius: 16px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+
+  .project-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 48px rgba(13,148,136,0.18);
+    border-color: rgba(94,234,212,0.3);
+  }
+
+  .project-img {
+    width: 100%; height: 180px;
+    object-fit: cover;
+    background: linear-gradient(135deg, var(--blue-navy), var(--teal-dark));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 3rem;
+  }
+
+  .project-body { padding: 1.3rem; }
+
+  .project-tag {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: rgba(13,148,136,0.15);
+    border: 1px solid rgba(94,234,212,0.2);
+    padding: 0.2rem 0.6rem;
+    border-radius: 100px;
+    margin-bottom: 0.6rem;
+  }
+
+  .project-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1.05rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .project-desc {
+    font-size: 0.85rem;
+    color: rgba(240,253,244,0.55);
+    line-height: 1.6;
+    margin-bottom: 0.8rem;
+  }
+
+  .project-link {
+    font-size: 0.82rem;
+    color: var(--accent);
+    font-weight: 600;
+    display: flex; align-items: center; gap: 0.3rem;
+  }
+
+  /* MODAL */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(13,31,60,0.92);
+    backdrop-filter: blur(8px);
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s;
+  }
+
+  .modal-overlay.active {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .modal {
+    background: var(--blue-navy);
+    border: 1px solid rgba(94,234,212,0.2);
+    border-radius: 20px;
+    padding: 2rem;
+    max-width: 520px;
+    width: 100%;
+    max-height: 85vh;
+    overflow-y: auto;
+    transform: translateY(20px) scale(0.97);
+    transition: transform 0.25s;
+  }
+
+  .modal-overlay.active .modal {
+    transform: translateY(0) scale(1);
+  }
+
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+  }
+
+  .modal-close {
+    background: rgba(94,234,212,0.1);
+    border: 1px solid rgba(94,234,212,0.2);
+    color: var(--accent);
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .modal-emoji { font-size: 3rem; margin-bottom: 0.8rem; }
+
+  .modal-tag {
+    display: inline-block;
+    font-size: 0.7rem; font-weight: 600;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--accent);
+    background: rgba(13,148,136,0.15);
+    border: 1px solid rgba(94,234,212,0.2);
+    padding: 0.2rem 0.6rem;
+    border-radius: 100px;
+    margin-bottom: 0.5rem;
+  }
+
+  .modal h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.4rem; font-weight: 800;
+    margin-bottom: 0.5rem;
+  }
+
+  .modal p {
+    color: rgba(240,253,244,0.65);
+    line-height: 1.7;
+    font-size: 0.92rem;
+    margin-bottom: 1rem;
+  }
+
+  .modal-features {
+    list-style: none;
+    margin-bottom: 1.5rem;
+    display: flex; flex-direction: column; gap: 0.5rem;
+  }
+
+  .modal-features li {
+    display: flex; align-items: center; gap: 0.6rem;
+    font-size: 0.88rem;
+    color: rgba(240,253,244,0.8);
+  }
+
+  .modal-features li::before {
+    content: '✓';
+    color: var(--accent);
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .modal-price {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.5rem; font-weight: 800;
+    color: var(--accent);
+    margin-bottom: 1.2rem;
+  }
+
+  .modal-cta {
+    display: block;
+    text-align: center;
+    background: linear-gradient(135deg, var(--teal), var(--teal-dark));
+    color: white;
+    padding: 0.9rem;
+    border-radius: 10px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+  .modal-cta:hover { opacity: 0.85; }
+
+  /* PRICING */
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .pricing-card {
+    background: rgba(13,148,136,0.07);
+    border: 1px solid rgba(94,234,212,0.12);
+    border-radius: 20px;
+    padding: 2rem;
+    position: relative;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .pricing-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 48px rgba(13,148,136,0.15);
+  }
+
+  .pricing-card.popular {
+    border-color: rgba(94,234,212,0.4);
+    background: rgba(13,148,136,0.13);
+  }
+
+  .popular-badge {
+    position: absolute;
+    top: -14px; left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, var(--teal), var(--teal-dark));
+    color: white;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.3rem 1rem;
+    border-radius: 100px;
+    white-space: nowrap;
+  }
+
+  .pricing-name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--gray);
+    margin-bottom: 0.5rem;
+  }
+
+  .pricing-range {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.8rem;
+    color: var(--white);
+    margin-bottom: 0.4rem;
+  }
+
+  .pricing-range span {
+    font-size: 1rem;
+    color: var(--gray);
+    font-weight: 400;
+  }
+
+  .pricing-desc {
+    font-size: 0.85rem;
+    color: rgba(240,253,244,0.5);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+  }
+
+  .pricing-features {
+    list-style: none;
+    display: flex; flex-direction: column; gap: 0.55rem;
+    margin-bottom: 1.8rem;
+  }
+
+  .pricing-features li {
+    display: flex; align-items: center; gap: 0.6rem;
+    font-size: 0.88rem;
+    color: rgba(240,253,244,0.8);
+  }
+
+  .pricing-features li .check {
+    width: 18px; height: 18px;
+    background: rgba(13,148,136,0.2);
+    border: 1px solid rgba(94,234,212,0.3);
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--accent);
+    font-size: 0.65rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .btn-pricing {
+    display: block;
+    text-align: center;
+    padding: 0.85rem;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: all 0.2s;
+    cursor: pointer;
+    border: none;
+  }
+
+  .btn-pricing.outline {
+    background: transparent;
+    border: 1px solid rgba(94,234,212,0.3);
+    color: var(--accent);
+  }
+
+  .btn-pricing.outline:hover {
+    background: rgba(94,234,212,0.08);
+  }
+
+  .btn-pricing.solid {
+    background: linear-gradient(135deg, var(--teal), var(--teal-dark));
+    color: white;
+    box-shadow: 0 4px 20px rgba(13,148,136,0.3);
+  }
+
+  .btn-pricing.solid:hover {
+    box-shadow: 0 8px 32px rgba(13,148,136,0.5);
+    transform: translateY(-1px);
+  }
+
+  /* CONTACT */
+  .contact-section {
+    text-align: center;
+    padding: 4rem 2rem;
+    max-width: 700px;
+    margin: 0 auto;
+    position: relative; z-index: 1;
+  }
+
+  .contact-card {
+    background: rgba(13,148,136,0.08);
+    border: 1px solid rgba(94,234,212,0.15);
+    border-radius: 24px;
+    padding: 3rem 2rem;
+  }
+
+  .whatsapp-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: #25D366;
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 1rem;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 20px rgba(37,211,102,0.3);
+  }
+
+  .whatsapp-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(37,211,102,0.4);
+  }
+
+  /* FOOTER */
+  footer {
+    position: relative; z-index: 1;
+    border-top: 1px solid rgba(94,234,212,0.1);
+    padding: 2rem;
+    text-align: center;
+    color: rgba(240,253,244,0.3);
+    font-size: 0.82rem;
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--blue-dark); }
+  ::-webkit-scrollbar-thumb { background: var(--teal-dark); border-radius: 3px; }
+
+  /* MOBILE */
+  @media (max-width: 640px) {
+    nav ul { display: none; }
+    .hero-stats { gap: 1.5rem; }
+    .projects-grid { grid-template-columns: 1fr; }
+    .pricing-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">
+    <div class="logo-icon">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+        <rect x="2" y="2" width="6" height="6" rx="1.5" fill="white"/>
+        <rect x="10" y="2" width="6" height="6" rx="1.5" fill="rgba(255,255,255,0.5)"/>
+        <rect x="2" y="10" width="6" height="6" rx="1.5" fill="rgba(255,255,255,0.5)"/>
+        <rect x="10" y="10" width="6" height="6" rx="1.5" fill="white"/>
+      </svg>
+    </div>
+    DigiGrow
+  </div>
+  <ul>
+    <li><a href="#projekte">Projekte</a></li>
+    <li><a href="#cmime">Çmime</a></li>
+    <li><a href="#kontakt" class="nav-cta">Na Kontakto</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">🚀 Zgjidhje Dixhitale për Biznesin Tënd</div>
+  <h1>Rritu <span>Dixhitalisht</span><br>Me DigiGrow</h1>
+  <p>Krijojmë website profesionale, strategji sociale dhe zgjidhje dixhitale që ndihmojnë biznesin tënd të rritet.</p>
+  <div class="hero-btns">
+    <a href="#projekte" class="btn-primary">Shiko Projektet</a>
+    <a href="#cmime" class="btn-secondary">Shiko Çmimet</a>
+  </div>
+  <div class="hero-stats">
+    <div class="stat">
+      <div class="stat-num">50+</div>
+      <div class="stat-label">Projekte të Kryera</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">100%</div>
+      <div class="stat-label">Klientë të Kënaqur</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">3+</div>
+      <div class="stat-label">Vite Eksperiencë</div>
+    </div>
+  </div>
+</div>
+
+<!-- PROJECTS SECTION -->
+<div class="section-divider reveal"><span class="section-label">Portofoli</span></div>
+<section id="projekte" class="reveal">
+  <div class="section-title">Projektet e Mia</div>
+  <div class="section-sub">Kliko mbi çdo projekt për të parë detajet e plota dhe çfarë u realizua.</div>
+
+  <div class="projects-grid">
+
+    <div class="project-card" onclick="openModal('resto')">
+      <div class="project-img">🍽️</div>
+      <div class="project-body">
+        <div class="project-tag">Website</div>
+        <div class="project-title">Restaurant Tirana</div>
+        <div class="project-desc">Website i plotë me menu online, rezervime dhe integrim me rrjete sociale.</div>
+        <div class="project-link">Shiko projektin →</div>
+      </div>
+    </div>
+
+    <div class="project-card" onclick="openModal('salon')">
+      <div class="project-img">💈</div>
+      <div class="project-body">
+        <div class="project-tag">Landing Page</div>
+        <div class="project-title">Beauty Salon Pro</div>
+        <div class="project-desc">Landing page moderne me sistem rezervimesh online dhe galeri fotosh.</div>
+        <div class="project-link">Shiko projektin →</div>
+      </div>
+    </div>
+
+    <div class="project-card" onclick="openModal('shop')">
+      <div class="project-img">🛍️</div>
+      <div class="project-body">
+        <div class="project-tag">E-commerce</div>
+        <div class="project-title">Dyqan Online Fashion</div>
+        <div class="project-desc">Platformë e-commerce me katalog produktesh, pagesa online dhe panel admin.</div>
+        <div class="project-link">Shiko projektin →</div>
+      </div>
+    </div>
+
+    <div class="project-card" onclick="openModal('gym')">
+      <div class="project-img">💪</div>
+      <div class="project-body">
+        <div class="project-tag">Website + Social</div>
+        <div class="project-title">FitZone Gym</div>
+        <div class="project-desc">Website i palestrës me orare, çmime, dhe menaxhim të rrjeteve sociale.</div>
+        <div class="project-link">Shiko projektin →</div>
+      </div>
+    </div>
+
+    <div class="project-card" onclick="openModal('dental')">
+      <div class="project-img">🦷</div>
+      <div class="project-body">
+        <div class="project-tag">Website</div>
+        <div class="project-title">Klinika Dentare</div>
+        <div class="project-desc">Website profesional mjekësor me rezervime online dhe SEO të optimizuar.</div>
+        <div class="project-link">Shiko projektin →</div>
+      </div>
+    </div>
+
+    <div class="project-card" onclick="openModal('real')">
+      <div class="project-img">🏠</div>
+      <div class="project-body">
+        <div class="project-tag">Website + SEO</div>
+        <div class="project-title">Agjenci Imobiliare</div>
+        <div class="project-desc">Platëformë me listim pronash, filtrim dhe formë kontakti të avancuar.</div>
+        <div class="project-link">Shiko projektin →</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PRICING SECTION -->
+<div class="section-divider reveal"><span class="section-label">Çmimet</span></div>
+<section id="cmime" class="reveal">
+  <div class="section-title">Pako të Përshtatshme</div>
+  <div class="section-sub">Zgjidhni pakon që i përshtatet nevojave të biznesit tuaj. Çdo projekt është unik.</div>
+
+  <div class="pricing-grid">
+
+    <!-- STARTER -->
+    <div class="pricing-card reveal">
+      <div class="pricing-name">Starter</div>
+      <div class="pricing-range">€100 <span>— €220</span></div>
+      <div class="pricing-desc">Për biznese të reja që kërkojnë një prezencë online të thjeshtë dhe efektive.</div>
+      <ul class="pricing-features">
+        <li><span class="check">✓</span> Landing page e plotë</li>
+        <li><span class="check">✓</span> Dizajn responsive (mobile)</li>
+        <li><span class="check">✓</span> Formë kontakti</li>
+        <li><span class="check">✓</span> Hosting 1 vit</li>
+        <li><span class="check">✓</span> SSL certifikatë</li>
+        <li><span class="check">✓</span> Integrim WhatsApp</li>
+      </ul>
+      <a href="https://wa.me/355688266055?text=Pershendetje%2C%20jam%20i%20interesuar%20per%20paketen%20Starter!" target="_blank" class="btn-pricing outline">Fillo Tani →</a>
+    </div>
+
+    <!-- BIZNES -->
+    <div class="pricing-card popular reveal">
+      <div class="popular-badge">⭐ Më i Popullarizuar</div>
+      <div class="pricing-name">Biznes Profesional</div>
+      <div class="pricing-range">€220 <span>— €380</span></div>
+      <div class="pricing-desc">Për biznese që duan një website të plotë profesional me funksione të avancuara.</div>
+      <ul class="pricing-features">
+        <li><span class="check">✓</span> Deri në 7 faqe</li>
+        <li><span class="check">✓</span> Dizajn i personalizuar</li>
+        <li><span class="check">✓</span> SEO bazik i optimizuar</li>
+        <li><span class="check">✓</span> Integrim rrjete sociale</li>
+        <li><span class="check">✓</span> Blog (opsional)</li>
+        <li><span class="check">✓</span> Hosting 1 vit</li>
+        <li><span class="check">✓</span> Suport 3 muaj</li>
+      </ul>
+      <a href="https://wa.me/355688266055?text=Pershendetje%2C%20jam%20i%20interesuar%20per%20paketen%20Biznes%20Profesional!" target="_blank" class="btn-pricing solid">Fillo Tani →</a>
+    </div>
+
+    <!-- E-COMMERCE -->
+    <div class="pricing-card reveal">
+      <div class="pricing-name">E-Commerce</div>
+      <div class="pricing-range">€380<span>+</span></div>
+      <div class="pricing-desc">Për biznese që duan të shesin online me dyqan të plotë dhe panel admin.</div>
+      <ul class="pricing-features">
+        <li><span class="check">✓</span> Dyqan online i plotë</li>
+        <li><span class="check">✓</span> Panel admin</li>
+        <li><span class="check">✓</span> Pagesa online</li>
+        <li><span class="check">✓</span> Menaxhim produktesh</li>
+        <li><span class="check">✓</span> SEO e avancuar</li>
+        <li><span class="check">✓</span> Suport 6 muaj</li>
+      </ul>
+      <a href="https://wa.me/355688266055?text=Pershendetje%2C%20jam%20i%20interesuar%20per%20paketen%20E-Commerce!" target="_blank" class="btn-pricing outline">Fillo Tani →</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- CONTACT SECTION -->
+<div class="section-divider reveal"><span class="section-label">Kontakt</span></div>
+<div class="contact-section reveal" id="kontakt">
+  <div class="contact-card">
+    <div style="font-size:3rem;margin-bottom:1rem;">💬</div>
+    <div class="section-title" style="margin-bottom:0.6rem;">Na Kontakto</div>
+    <p style="color:rgba(240,253,244,0.55);font-size:0.95rem;line-height:1.7;margin-bottom:2rem;max-width:400px;margin-left:auto;margin-right:auto;">Keni pyetje ose dëshironi të filloni projektin tuaj? Na dërgoni mesazh direkt në WhatsApp dhe ju përgjigjemi brenda pak orësh.</p>
+    <a href="https://wa.me/355688266055" target="_blank" class="whatsapp-btn">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="white">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+      </svg>
+      Na Shkruaj në WhatsApp
+    </a>
+    <div style="margin-top:1.5rem;color:rgba(240,253,244,0.35);font-size:0.82rem;">+355 688 266 055</div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div style="margin-bottom:0.5rem;">
+    <span style="background:linear-gradient(135deg,#5eead4,#38bdf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-family:'Syne',sans-serif;font-weight:700;">DigiGrow</span>
+  </div>
+  © 2025 DigiGrow. Të gjitha të drejtat e rezervuara.
+</footer>
+
+<!-- MODALS -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModalOutside(event)">
+  <div class="modal" id="modal-content"></div>
+</div>
+
+<script>
+const projects = {
+  resto: {
+    emoji: '🍽️',
+    tag: 'Website',
+    title: 'Restaurant Tirana',
+    desc: 'Website i plotë dhe profesional për një restoran në Tiranë. Projekti përfshinte dizajn modern me ngjyra elegante, menu online interaktive, dhe sistem rezervimesh.',
+    features: ['Menu online me kategori dhe foto', 'Sistem rezervimesh online', 'Galeri fotosh dhe video', 'Integrim me Google Maps', 'Faqe "Rreth Nesh" dhe kontakt', 'Optimizim SEO lokal'],
+    price: '€220 – €280'
+  },
+  salon: {
+    emoji: '💈',
+    tag: 'Landing Page',
+    title: 'Beauty Salon Pro',
+    desc: 'Landing page moderne dhe tërheqëse për një salon bukurie. Fokus te dizajni vizual i fortë dhe konvertimi i vizitorëve në klientë.',
+    features: ['Dizajn i personalizuar me ngjyra brand', 'Sistem rezervimesh online', 'Galeri punësh (before/after)', 'Integrim me Instagram', 'Formë kontakti e shpejtë', 'Mobile-first design'],
+    price: '€150 – €200'
+  },
+  shop: {
+    emoji: '🛍️',
+    tag: 'E-commerce',
+    title: 'Dyqan Online Fashion',
+    desc: 'Platformë e-commerce e plotë për shitje online të veshjeve. Klienti arriti shitje online brenda javës së parë të lansimit.',
+    features: ['Katalog produktesh me filtrim', 'Sistem pagese online (Stripe/PayPal)', 'Panel admin i plotë', 'Menaxhim inventari', 'Sistemi i zbritjeve dhe kuponave', 'Raporte shitjesh'],
+    price: '€450 – €600'
+  },
+  gym: {
+    emoji: '💪',
+    tag: 'Website + Social',
+    title: 'FitZone Gym',
+    desc: 'Website i kompletuar për palestrë me menaxhim të plotë të rrjeteve sociale. Rritje 200% e ndjekësve brenda 3 muajve.',
+    features: ['Website me orare dhe çmime', 'Integrim me Instagram dhe Facebook', 'Galeri foto dhe video transformimesh', 'Formë regjistrimi online', 'Blog me këshilla fitness', 'SEO lokal i optimizuar'],
+    price: '€250 – €320'
+  },
+  dental: {
+    emoji: '🦷',
+    tag: 'Website',
+    title: 'Klinika Dentare',
+    desc: 'Website profesional mjekësor që respekton standardet e industrisë. Klinika arriti +40% rezervime online pas lansimit.',
+    features: ['Dizajn i pastër dhe profesional', 'Sistem rezervimesh automatik', 'Prezantim shërbimesh', 'Profil mjekësh', 'SSL dhe sigurim i të dhënave', 'Optimizim SEO i fortë'],
+    price: '€200 – €280'
+  },
+  real: {
+    emoji: '🏠',
+    tag: 'Website + SEO',
+    title: 'Agjenci Imobiliare',
+    desc: 'Platformë imobiliare me listim të pronave, filtrim të avancuar dhe sistem kontakti. Sot gjeneron mbi 100 lead organike në muaj.',
+    features: ['Listim pronash me foto dhe hartat', 'Filtrim i avancuar (çmim, zonë, lloj)', 'Formë kontakti dhe WhatsApp integrim', 'Panel admin për menaxhim pronash', 'SEO i fortë për Google', 'Raporte vizitorësh'],
+    price: '€350 – €450'
+  }
+};
+
+function openModal(id) {
+  const p = projects[id];
+  const wamsg = encodeURIComponent(`Pershendetje, jam i interesuar per nje projekt te ngjashem me "${p.title}"!`);
+  document.getElementById('modal-content').innerHTML = `
+    <div class="modal-header">
+      <div>
+        <div class="modal-emoji">${p.emoji}</div>
+        <div class="modal-tag">${p.tag}</div>
+        <h3>${p.title}</h3>
+      </div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <p>${p.desc}</p>
+    <ul class="modal-features">
+      ${p.features.map(f => `<li>${f}</li>`).join('')}
+    </ul>
+    <div class="modal-price">Çmimi: ${p.price}</div>
+    <a href="https://wa.me/355688266055?text=${wamsg}" target="_blank" class="modal-cta">💬 Kërko Projekt të Ngjashëm</a>
+  `;
+  document.getElementById('modal-overlay').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+function closeModalOutside(e) {
+  if (e.target === document.getElementById('modal-overlay')) closeModal();
+}
+
+// Scroll reveal
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
